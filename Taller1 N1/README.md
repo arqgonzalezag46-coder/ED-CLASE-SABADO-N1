@@ -29,6 +29,17 @@ El programa debe:
 
 ## 🖼️ Capturas o salida de ejemplo  
 
+### Menú principal del programa
+![Menú principal](imagenes/ejecucion1.png)
+
+### Ordenamiento con Selection Sort
+![Selection Sort paso a paso](imagenes/selectionsort.png)
+
+### Ordenamiento con Insertion Sort
+![Insertion Sort paso a paso](imagenes/insertionsort.png)
+
+---
+
 ### 📋 Menú principal
 - Llenar array
 
