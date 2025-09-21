@@ -61,7 +61,7 @@ El programa debe:
 - Paso 2:
 10 9 8 7 6 5 4 3 2 1
 ...
-- Resultado final (descendente):
+- Resultado final (descendente): 
 10 9 8 7 6 5 4 3 2 1
 
 ---
