@@ -49,8 +49,8 @@ El programa debe:
 
 - Ordenar array (Insertion Sort)
 
-- Salir
-Ingrese una opcion:
+- Salir 
+- Ingrese una opcion:
 
 ---
 
