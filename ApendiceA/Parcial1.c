@@ -12,7 +12,7 @@ Estudiante estudiantes[MAX] = {
     {2024104, 5.0},
     {2024101, 4.5},
     {2024103, 2.8},
-};  // ← punto y coma obligatorio
+};
 
 void mostrarEstudiantes(Estudiante arr[MAX], int n) {
     for (int i = 0; i < n; i++) {
