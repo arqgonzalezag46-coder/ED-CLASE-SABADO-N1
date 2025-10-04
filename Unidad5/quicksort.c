@@ -15,7 +15,7 @@ int main(){
     return 0;
 }
 // Funcion para intercambiar dos elementos
-void swap(int *a, int*b){
+void swap(int *a, int *b){
     int temp = *a;
     *a = *b;
     *b = temp;
