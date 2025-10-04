@@ -12,7 +12,7 @@ int main(){
     for(int i = 0; i < n; i++){
         printf("%d", data[i]);
     }
-    return 0:
+    return 0;
 }
 // Funcion para intercambiar dos elementos
 void swap(int *a, int*b){
