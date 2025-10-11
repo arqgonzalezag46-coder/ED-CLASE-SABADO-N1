@@ -8,14 +8,24 @@ int main() {
     int data[] = {6, 2, 4, 1, 5, 8, 12, 3, 9, 7};
     int n = sizeof(data) / sizeof(data[0]);
     quickSort(data, 0, n - 1);
+<<<<<<< HEAD
   
     for (int i = 0; i < n; i++) {
         printf("%d ", data[i]); 
+=======
+    // imprimir arreglo ordenado
+    for (int i = 0; i < n; i++) {
+        printf("%d ", data[i]); // agregado un espacio
+>>>>>>> 18a1e66b3699cdfe19a622ac3b6f7202aeaf70ce
     }
     return 0;
 }
 
+<<<<<<< HEAD
 
+=======
+// Funcion para intercambiar dos elementos
+>>>>>>> 18a1e66b3699cdfe19a622ac3b6f7202aeaf70ce
 void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
@@ -43,4 +53,8 @@ void quickSort(int arr[], int low, int high) {
         quickSort(arr, low, p - 1);
         quickSort(arr, p + 1, high);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 18a1e66b3699cdfe19a622ac3b6f7202aeaf70ce
