@@ -1,4 +1,4 @@
-git#include <stdio.h>
+#include <stdio.h>
 #define MAX 5
 
 typedef struct {
@@ -11,7 +11,7 @@ Estudiante estudiantes[MAX] = {
     {2024102, 3.2},
     {2024104, 5.0},
     {2024101, 4.5},
-    {2024103, 2.8},
+    {2024103, 2.8}
 };
 
 void mostrarEstudiantes(Estudiante arr[MAX], int n) {
@@ -49,13 +49,13 @@ void selectionSort(Estudiante arr[MAX], int inicio, int n) {
             minIndex = j;
         }
     }
-    
+
     if (minIndex != inicio) {
         Estudiante temp = arr[inicio];
         arr[inicio] = arr[minIndex];
         arr[minIndex] = temp;
     }
-    
+
     selectionSort(arr, inicio + 1, n);
 }
 
@@ -74,21 +74,21 @@ int main() {
         switch (opc) {
             case 1:
                 mostrarEstudiantes(estudiantes, MAX);
-            break;
+                break;
             case 2:
                 printf("La nota maxima es: %.2f\n", notaMaxima(estudiantes, 0, MAX));
-            break;
+                break;
             case 3:
                 printf("El promedio del curso es: %.2f\n", promedio(estudiantes, MAX));
-            break;
+                break;
             case 4:
                 selectionSort(estudiantes, 0, MAX);
                 printf("Lista ordenada:\n");
                 mostrarEstudiantes(estudiantes, MAX);
-            break;
+                break;
             case 5:
                 printf("Gracias por usar el programa.\n");
-            break;
+                break;
             default:
                 printf("Opcion no valida.\n");
         }
