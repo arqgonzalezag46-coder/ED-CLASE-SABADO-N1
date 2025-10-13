@@ -1,4 +1,4 @@
-# ✈️ Gestión de Memoria Dinámica y Listas Enlazadas  
+## ✈️ Gestión de Memoria Dinámica y Listas Enlazadas  
 ## 💻 Taller: Sistema de Tiquetes de Avión
 
 ## 📚 Curso  
@@ -32,8 +32,8 @@ El sistema permite:
 
 | Versión | Tipo de Lista | Archivo | Descripción |
 |:-------:|:-------------:|:------|:------------|
-| 1️⃣ | Lista Simple | `TiquetesAvion.c` | Usa lista enlazada simple para almacenar pasajeros. |
-| 2️⃣ | Lista Doble | `TiquetesAvionDoble.c` | Usa lista doblemente enlazada para permitir recorrido hacia adelante y atrás. |
+| 1️⃣ | Lista Simple | `simple.c` | Usa lista enlazada simple para almacenar pasajeros. |
+| 2️⃣ | Lista Doble | `doble.c` | Usa lista doblemente enlazada para permitir recorrido hacia adelante y atrás. |
 
 ---
 
@@ -59,31 +59,49 @@ El sistema permite:
 
 ---
 
-## 🖥️ Ejemplo de Ejecución
+## 🖥️ Ejemplo de Ejecución: simple.c
 
-===== MENU PRINCIPAL =====
+```text
+=== MENU PRINCIPAL SIMPLE.C ===
+1. Establecer capacidad del avion
+2. Vender tiquete
+3. Iniciar abordaje
+4. Ver abordados
+5. Ver no abordados
+6. Salir
 
-- Establecer capacidad del avion
-- Vender tiquete
-- Iniciar abordaje
-- Ver pasajeros abordados
-- Ver pasajeros no abordados
-- Salir
+Seleccione una opcion: 1
+Ingrese la capacidad del avion (max 50): 5
+Capacidad establecida correctamente.
 
----
+Seleccione una opcion: 2
+Ingrese el apellido del pasajero: Perez
+Tiquete vendido correctamente.
 
-## 🧱 Estructura del Nodo
+Seleccione una opcion: 2
+Ingrese el apellido del pasajero: Gomez
+Tiquete vendido correctamente.
 
-- Lista Simple
-```c
+Seleccione una opcion: 3
+¿El pasajero Perez abordo? (s/n): s
+¿El pasajero Gomez abordo? (s/n): n
+Abordaje completado.
+
+Seleccione una opcion: 4
+Total abordados: 1
+
+Seleccione una opcion: 5
+Total no abordados: 1
+
+🧱 Estructura del Nodo
+Lista Simple
 typedef struct nodo {
     char genero[20];
     char apellido[30];
     struct nodo *sig;
 } nodo;
 
-- lista Doble
-```c
+Lista Doble
 typedef struct nodo {
     char genero[20];
     char apellido[30];
@@ -91,21 +109,13 @@ typedef struct nodo {
     struct nodo *sig;
 } nodo;
 
-Cada nodo representa un pasajero con:
 
+Cada nodo representa un pasajero con:
 👤 Género
 🧾 Primer Apellido
 🔗 Puntero(s) al siguiente y anterior nodo
 
-Conceptos Aplicados
-
-🧱 Memoria Dinámica: Uso de malloc() para crear nodos en tiempo de ejecución.
-🔗 Listas Enlazadas Simples y Dobles: Manejo de punteros sig y ant para recorrer y organizar la lista.
-🚦 Estructuras de Control: Uso de do-while, switch, if, while para el menú y la lógica del programa.
-💡 Restricciones de negocio: Control de sobreventa y abordaje en orden de venta.
-
 📁 Archivos Incluidos
-TiquetesAvion.c → Lista enlazada simple
-TiquetesAvionDoble.c → Lista doblemente enlazada
+simple.c → Lista enlazada simple
+doble.c → Lista doblemente enlazada
 README.md → Documentación completa del proyecto
-
