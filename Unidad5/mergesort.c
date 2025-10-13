@@ -34,7 +34,6 @@ void mergeSort(int arr[], int left, int right) {
     if (left < right) {
         int mid = (left + right) / 2;
 
-        // Ordenar las dos mitades
         mergeSort(arr, left, mid);
         mergeSort(arr, mid + 1, right);
 
@@ -43,7 +42,7 @@ void mergeSort(int arr[], int left, int right) {
 }
 
 int main() {
-    int data[] = {6, 2, 4, 1, 5, 8, 12, 3, 9, 7};
+    int data[] = {6, 2, 4, 1, 5, 8, 10, 3, 9, 7};
     int n = sizeof(data) / sizeof(data[0]);
 
     printf("Arreglo original:\n");
