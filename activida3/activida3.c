@@ -1,141 +1,201 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-#define MAX_NAME 50
+#define MAX_LASTNAME 110
+#define MAX_DOCNUM 16
 
 typedef struct Passenger {
-    char doc_number[20];
-    char doc_type[20];
-    char genero[20];
-    char apellido[30];
-    struct Passenger *sig;
+    char doc_type[4];
+    char doc_number[MAX_DOCNUM];
+    char last_name[MAX_LASTNAME];
+    struct Passenger* next;
 } Passenger;
 
-// Prototipos
-void read_line(char *str, int n);
-void establecer_capacidad(int *capacidad, int *max_venta);
-Passenger* vender_tiquete(Passenger **head, int capacidad, int vendidos, int max_venta);
-Passenger* eliminar_primero(Passenger **head);
+typedef struct {
+    Passenger* head;
+    int size;
+} List;
+
+void init_list(List* l) {
+    l->head = NULL;
+    l->size = 0;
+}
+
+int valid_doc_type(const char* s) {
+    return strcmp(s, "CC") == 0 || strcmp(s, "TI") == 0 || strcmp(s, "PA") == 0;
+}
+
+int valid_lastname(const char* s) {
+    if (strlen(s) < 1 || strlen(s) >= MAX_LASTNAME) return 0;
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (!isalpha(s[i])) return 0;
+    }
+    return 1;
+}
+
+int agregar_pasajero(List* l, const char* doc_type, const char* doc_number, const char* last_name) {
+    Passenger* nuevo = (Passenger*)malloc(sizeof(Passenger));
+    if (!nuevo) return 0;
+    strcpy(nuevo->doc_type, doc_type);
+    strcpy(nuevo->doc_number, doc_number);
+    strcpy(nuevo->last_name, last_name);
+    nuevo->next = NULL;
+
+    if (l->head == NULL) {
+        l->head = nuevo;
+    } else {
+        Passenger* actual = l->head;
+        while (actual->next) actual = actual->next;
+        actual->next = nuevo;
+    }
+    l->size++;
+    return 1;
+}
+
+void print_list(List* l) {
+    if (!l->head) {
+        printf("No hay pasajeros registrados.\n");
+        return;
+    }
+    printf("Lista de pasajeros:\n");
+    Passenger* cur = l->head;
+    int i = 1;
+    while (cur) {
+        printf("%d) %s | %s | %s\n", i, cur->doc_type, cur->doc_number, cur->last_name);
+        cur = cur->next;
+        i++;
+    }
+}
+
+Passenger* eliminar_primero(List* l) {
+    if (!l->head) return NULL;
+    Passenger* temp = l->head;
+    l->head = l->head->next;
+    temp->next = NULL;
+    l->size--;
+    return temp;
+}
+
+void liberar_lista(List* l) {
+    Passenger* cur = l->head;
+    while (cur) {
+        Passenger* temp = cur;
+        cur = cur->next;
+        free(temp);
+    }
+    l->head = NULL;
+    l->size = 0;
+}
+
+void read_line(char* buffer, int size) {
+    fgets(buffer, size, stdin);
+    size_t len = strlen(buffer);
+    if (len > 0 && buffer[len - 1] == '\n') buffer[len - 1] = '\0';
+}
 
 int main() {
-    Passenger *lista = NULL;
-    int capacidad = 0, max_venta = 0, vendidos = 0, abordados = 0;
+    List lista;
+    init_list(&lista);
+
+    int capacidad;
+    printf("Ingrese la capacidad maxima del avion: ");
+    scanf("%d", &capacidad);
+    while (getchar() != '\n');
+
+    int extra = capacidad / 10; // 10% overbooking
+    int max_tiquetes = capacidad + extra;
+    printf("Capacidad real: %d\nOverbooking permitido: %d\nTotal maximo: %d\n\n",
+           capacidad, extra, max_tiquetes);
+
+    int vendidos = 0, abordados = 0;
     int opcion;
 
     do {
-        printf("\n===== MENU PRINCIPAL =====\n");
-        printf("1. Establecer capacidad del avion\n");
-        printf("2. Vender tiquete\n");
-        printf("3. Iniciar abordaje\n");
-        printf("4. Ver pasajeros abordados\n");
-        printf("5. Ver pasajeros no abordados\n");
-        printf("6. Salir\n");
-        printf("Seleccione una opcion: ");
+        printf("\n--- Menu ---\n");
+        printf("1) Registrar pasajero\n");
+        printf("2) Mostrar pasajeros\n");
+        printf("3) Abordar siguiente\n");
+        printf("4) Abordar todos hasta llenar avion\n");
+        printf("5) Mostrar estado del vuelo\n");
+        printf("6) Salir\n");
+        printf("Opcion: ");
         scanf("%d", &opcion);
-        getchar(); // limpiar buffer
+        while (getchar() != '\n');
 
         if (opcion == 1) {
-            establecer_capacidad(&capacidad, &max_venta);
-        }
-        else if (opcion == 2) {
-            Passenger *nuevo = vender_tiquete(&lista, capacidad, vendidos, max_venta);
-            if (nuevo != NULL) {
+            if (vendidos >= max_tiquetes) {
+                printf("No se pueden registrar mas pasajeros.\n");
+                continue;
+            }
+            char tipo[4], numero[MAX_DOCNUM], apellido[MAX_LASTNAME];
+            do {
+                printf("Tipo de documento (CC, TI, PA): ");
+                read_line(tipo, sizeof(tipo));
+            } while (!valid_doc_type(tipo));
+
+            printf("Numero de documento: ");
+            read_line(numero, sizeof(numero));
+
+            do {
+                printf("Primer apellido: ");
+                read_line(apellido, sizeof(apellido));
+            } while (!valid_lastname(apellido));
+
+            if (agregar_pasajero(&lista, tipo, numero, apellido)) {
                 vendidos++;
-                printf("🎫 Tiquete vendido correctamente (%d/%d)\n", vendidos, max_venta);
+                printf("Pasajero registrado.\n");
+            } else {
+                printf("Error al registrar pasajero.\n");
             }
-        }
-        else if (opcion == 3) {
-            printf("\n--- Iniciando abordaje ---\n");
-            while (abordados < capacidad && lista != NULL) {
-                Passenger *p = eliminar_primero(&lista);
-                if (p != NULL) {
-                    printf("Abordando pasajero: %s %s, %s, %s\n", p->doc_type, p->doc_number, p->genero, p->apellido);
-                    abordados++;
-                    free(p);
-                }
+
+        } else if (opcion == 2) {
+            print_list(&lista);
+
+        } else if (opcion == 3) {
+            if (abordados >= capacidad) {
+                printf("El avion ya esta lleno.\n");
+                continue;
             }
-            printf("\nAbordaje completado.\n");
-        }
-        else if (opcion == 4) {
-            printf("\nTotal abordados: %d\n", abordados);
-        }
-        else if (opcion == 5) {
-            printf("\nTotal no abordados: %d\n", vendidos - abordados);
-        }
-        else if (opcion == 6) {
-            // liberar lista restante
-            while (lista != NULL) {
-                Passenger *p = eliminar_primero(&lista);
+            Passenger* p = eliminar_primero(&lista);
+            if (!p) {
+                printf("No hay pasajeros para abordar.\n");
+            } else {
+                printf("Abordando: %s | %s | %s\n", p->doc_type, p->doc_number, p->last_name);
                 free(p);
+                abordados++;
             }
-            printf("Saliendo del programa...\n");
-        }
-        else {
+
+        } else if (opcion == 4) {
+            int count = 0;
+            while (abordados < capacidad && lista.size > 0) {
+                Passenger* p = eliminar_primero(&lista);
+                printf("Abordando: %s | %s | %s\n", p->doc_type, p->doc_number, p->last_name);
+                free(p);
+                abordados++;
+                count++;
+            }
+            if (count == 0) printf("No hay pasajeros para abordar.\n");
+            else printf("%d pasajeros abordaron.\n", count);
+
+        } else if (opcion == 5) {
+            printf("Estado actual del vuelo:\n");
+            printf("Capacidad real: %d\n", capacidad);
+            printf("Maximo con overbooking: %d\n", max_tiquetes);
+            printf("Registrados: %d\n", vendidos);
+            printf("Abordados: %d\n", abordados);
+            printf("En espera: %d\n", lista.size);
+
+        } else if (opcion == 6) {
+            printf("Liberando memoria y saliendo...\n");
+            liberar_lista(&lista);
+            break;
+        } else {
             printf("Opcion invalida.\n");
         }
 
-    } while (opcion != 6);
+    } while (1);
 
     return 0;
-}
-
-// -----------------------------
-// Funciones auxiliares
-// -----------------------------
-void read_line(char *str, int n) {
-    fgets(str, n, stdin);
-    str[strcspn(str, "\n")] = 0;
-}
-
-void establecer_capacidad(int *capacidad, int *max_venta) {
-    if (*capacidad > 0) {
-        printf("La capacidad ya fue establecida: %d asientos.\n", *capacidad);
-        return;
-    }
-    printf("Ingrese la capacidad del avion: ");
-    scanf("%d", capacidad);
-    getchar();
-    *max_venta = *capacidad + (*capacidad / 10);
-    printf("Capacidad establecida: %d pasajeros (+10%% sobreventa: %d total)\n", *capacidad, *max_venta);
-}
-
-Passenger* vender_tiquete(Passenger **head, int capacidad, int vendidos, int max_venta) {
-    if (vendidos >= max_venta) {
-        printf("No se pueden vender más tiquetes. Se alcanzó la sobreventa máxima.\n");
-        return NULL;
-    }
-
-    Passenger *nuevo = (Passenger*) malloc(sizeof(Passenger));
-    if (!nuevo) {
-        printf("Error de memoria.\n");
-        return NULL;
-    }
-
-    printf("Ingrese genero (Femenino/Masculino/No Binario): ");
-    read_line(nuevo->genero, MAX_NAME);
-    printf("Ingrese primer apellido: ");
-    read_line(nuevo->apellido, MAX_NAME);
-    printf("Ingrese tipo de documento: ");
-    read_line(nuevo->doc_type, MAX_NAME);
-    printf("Ingrese numero de documento: ");
-    read_line(nuevo->doc_number, MAX_NAME);
-
-    nuevo->sig = NULL;
-    if (*head == NULL) {
-        *head = nuevo;
-    } else {
-        Passenger *temp = *head;
-        while (temp->sig != NULL)
-            temp = temp->sig;
-        temp->sig = nuevo;
-    }
-    return nuevo;
-}
-
-Passenger* eliminar_primero(Passenger **head) {
-    if (*head == NULL) return NULL;
-    Passenger *temp = *head;
-    *head = (*head)->sig;
-    return temp;
 }
