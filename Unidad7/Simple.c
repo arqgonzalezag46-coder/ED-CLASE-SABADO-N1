@@ -7,8 +7,7 @@ typedef struct nodo {
 } nodo;
 
 nodo *primero = NULL;
-nodo *ultimo = NULL;  
-
+nodo *ultimo = NULL;
 int capacidad = 0;
 int vendidos = 0;
 int abordaje_iniciado = 0;
@@ -32,7 +31,7 @@ int main() {
         printf("5. Ver no abordados\n");
         printf("6. Salir\n");
         printf("Seleccione opcion: ");
-        if (scanf("%d", &opc) != 1) { 
+        if (scanf("%d", &opc) != 1) {
             while (getchar() != '\n');
             opc = 0;
         }
@@ -46,7 +45,6 @@ int main() {
             default: if (opc!=6) printf("Opcion no valida.\n");
         }
     } while(opc != 6);
-
     liberarLista();
     return 0;
 }
@@ -63,7 +61,7 @@ void establecer() {
         while (getchar() != '\n');
         return;
     }
-    maxVenta = capacidad + (capacidad * 10) / 100; 
+    maxVenta = capacidad + (capacidad * 10) / 100;
     printf("Capacidad: %d. Maximo con sobreventa: %d\n", capacidad, maxVenta);
 }
 
@@ -80,7 +78,6 @@ void vender() {
         printf("Se alcanzo el limite de sobreventa (%d).\n", maxVenta);
         return;
     }
-
     char ape[30];
     printf("Ingrese el primer apellido del pasajero (sin espacios): ");
     if (scanf("%29s", ape) != 1) {
@@ -88,26 +85,21 @@ void vender() {
         while (getchar() != '\n');
         return;
     }
-
     nodo *nuevo = (nodo*) malloc(sizeof(nodo));
     if (!nuevo) {
         printf("Error: memoria insuficiente.\n");
         return;
     }
-    
     int i=0;
     while (ape[i] != '\0' && i < 29) { nuevo->apellido[i] = ape[i]; i++; }
     nuevo->apellido[i] = '\0';
-
     nuevo->sig = NULL;
-
-    if (primero == NULL) { 
+    if (primero == NULL) {
         primero = ultimo = nuevo;
     } else {
         ultimo->sig = nuevo;
         ultimo = nuevo;
     }
-
     vendidos++;
     printf("Tiquete vendido a %s. Total vendidos: %d\n", nuevo->apellido, vendidos);
 }
