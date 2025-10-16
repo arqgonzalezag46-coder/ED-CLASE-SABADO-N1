@@ -2,7 +2,6 @@
 
 #define MAX 50  
 
-
 typedef struct {
     char apellido[30];
     int ant;  
@@ -10,12 +9,11 @@ typedef struct {
 } Nodo;
 
 Nodo memoria[MAX];   
-int cab = -1;        /
+int cab = -1;
 int libre = 0;       
 int capacidad = 0;
 int vendidos = 0;
 int abordados = 0;
-
 
 void establecer();
 void vender();
@@ -108,7 +106,7 @@ void abordar() {
     int temp = cab;
     while (temp != -1) {
         char r;
-        printf("¿El pasajero %s abordo? (s/n): ", memoria[temp].apellido);
+        printf("El pasajero %s abordo? (s/n): ", memoria[temp].apellido);
         scanf(" %c", &r);
         if (r == 's' || r == 'S') {
             abordados++;
