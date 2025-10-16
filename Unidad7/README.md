@@ -109,7 +109,6 @@ typedef struct nodo {
     struct nodo *sig;
 } nodo;
 
-
 Cada nodo representa un pasajero con:
 👤 Género
 🧾 Primer Apellido
