@@ -1,18 +1,18 @@
-#include <stdio.h>
+include <stdio.h>
 
-#define MAX 50
+#define MAX 50  
 
 
 typedef struct {
     char apellido[30];
-    int ant;
-    int sig;
+    int ant;  
+    int sig;  
 } Nodo;
 
 
-Nodo memoria[MAX];
-int cab = -1;
-int libre = 0;
+Nodo memoria[MAX];   
+int cab = -1;       
+int libre = 0;      
 int capacidad = 0;
 int vendidos = 0;
 int abordados = 0;
@@ -27,7 +27,7 @@ void verNoAbordados();
 int main() {
     int opc;
     do {
-        printf("\n=== MENU PRINCIPAL ===\n");
+        printf("\n=== MENU PRINCIPAL DOBLE.C ===\n");
         printf("1. Establecer capacidad del avion\n");
         printf("2. Vender tiquete\n");
         printf("3. Iniciar abordaje\n");
@@ -43,13 +43,14 @@ int main() {
             case 3: abordar(); break;
             case 4: verAbordados(); break;
             case 5: verNoAbordados(); break;
-            case 6: printf("\nSaliendo...\n"); break;
+            case 6: printf("\nSaliendo del programa...\n"); break;
             default: printf("\nOpcion invalida.\n"); break;
         }
     } while (opc != 6);
 
     return 0;
 }
+
 
 void establecer() {
     if (capacidad > 0) {
@@ -66,6 +67,7 @@ void establecer() {
         printf("Capacidad establecida correctamente.\n");
     }
 }
+
 
 void vender() {
     if (capacidad == 0) {
@@ -98,6 +100,7 @@ void vender() {
     printf("Tiquete vendido correctamente.\n");
 }
 
+
 void abordar() {
     if (vendidos == 0) {
         printf("\nNo hay pasajeros para abordar.\n");
@@ -107,7 +110,7 @@ void abordar() {
     int temp = cab;
     while (temp != -1) {
         char r;
-        printf("¿El pasajero %s abordó? (s/n): ", memoria[temp].apellido);
+        printf("¿El pasajero %s abordo? (s/n): ", memoria[temp].apellido);
         scanf(" %c", &r);
         if (r == 's' || r == 'S') {
             abordados++;
@@ -117,9 +120,14 @@ void abordar() {
     printf("\nAbordaje completado.\n");
 }
 
+
 void verAbordados() {
-    printf("\nTotal abordados: %d\n", abordados);
+    if (abordados == 0)
+        printf("\nNingun pasajero ha abordado.\n");
+    else
+        printf("\nTotal abordados: %d\n", abordados);
 }
+
 
 void verNoAbordados() {
     if (vendidos == 0)
