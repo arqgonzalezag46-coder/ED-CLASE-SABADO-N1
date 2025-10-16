@@ -106,7 +106,7 @@ void abordar() {
     int temp = cab;
     while (temp != -1) {
         char r;
-        printf("El pasajero %s abordo? (s/n): ", memoria[temp].apellido);
+        printf("¿El pasajero %s abordó? (s/n): ", memoria[temp].apellido);
         scanf(" %c", &r);
         if (r == 's' || r == 'S') {
             abordados++;
