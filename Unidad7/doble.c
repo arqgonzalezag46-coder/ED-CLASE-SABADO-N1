@@ -2,7 +2,6 @@
 
 #define MAX 50  
 
-
 typedef struct {
     char apellido[30];
     int ant;  
