@@ -1,23 +1,20 @@
 #include <stdio.h>
 
-#define MAX 50  // capacidad máxima simulada
+#define MAX 50
 
-// Estructura del nodo
 typedef struct {
     char apellido[30];
-    int ant;  // índice del nodo anterior
-    int sig;  // índice del nodo siguiente
+    int ant;
+    int sig;
 } Nodo;
 
-// Variables globales
-Nodo memoria[MAX];   // bloque de memoria simulada
-int cab = -1;        // inicio de la lista
-int libre = 0;       // próximo espacio libre
+Nodo memoria[MAX];
+int cab = -1;
+int libre = 0;
 int capacidad = 0;
 int vendidos = 0;
 int abordados = 0;
 
-// Prototipos
 void establecer();
 void vender();
 void abordar();
@@ -27,7 +24,7 @@ void verNoAbordados();
 int main() {
     int opc;
     do {
-        printf("\n=== MENU PRINCIPAL DOBLE.C ===\n");
+        printf("\n=== MENU PRINCIPAL ===\n");
         printf("1. Establecer capacidad del avion\n");
         printf("2. Vender tiquete\n");
         printf("3. Iniciar abordaje\n");
@@ -43,7 +40,7 @@ int main() {
             case 3: abordar(); break;
             case 4: verAbordados(); break;
             case 5: verNoAbordados(); break;
-            case 6: printf("\nSaliendo del programa...\n"); break;
+            case 6: printf("\nSaliendo...\n"); break;
             default: printf("\nOpcion invalida.\n"); break;
         }
     } while (opc != 6);
@@ -51,8 +48,6 @@ int main() {
     return 0;
 }
 
-// -------------------------------------------------------------
-// 1. Establecer capacidad
 void establecer() {
     if (capacidad > 0) {
         printf("\nLa capacidad ya fue establecida: %d asientos.\n", capacidad);
@@ -69,8 +64,6 @@ void establecer() {
     }
 }
 
-// -------------------------------------------------------------
-// 2. Vender tiquete (crear "nodo" en memoria simulada)
 void vender() {
     if (capacidad == 0) {
         printf("\nPrimero debe establecer la capacidad del avion.\n");
@@ -102,8 +95,6 @@ void vender() {
     printf("Tiquete vendido correctamente.\n");
 }
 
-// -------------------------------------------------------------
-// 3. Abordar pasajeros
 void abordar() {
     if (vendidos == 0) {
         printf("\nNo hay pasajeros para abordar.\n");
@@ -113,7 +104,7 @@ void abordar() {
     int temp = cab;
     while (temp != -1) {
         char r;
-        printf("¿El pasajero %s abordo? (s/n): ", memoria[temp].apellido);
+        printf("¿El pasajero %s abordó? (s/n): ", memoria[temp].apellido);
         scanf(" %c", &r);
         if (r == 's' || r == 'S') {
             abordados++;
@@ -123,17 +114,10 @@ void abordar() {
     printf("\nAbordaje completado.\n");
 }
 
-// -------------------------------------------------------------
-// 4. Ver abordados
 void verAbordados() {
-    if (abordados == 0)
-        printf("\nNingun pasajero ha abordado.\n");
-    else
-        printf("\nTotal abordados: %d\n", abordados);
+    printf("\nTotal abordados: %d\n", abordados);
 }
 
-// -------------------------------------------------------------
-// 5. Ver no abordados
 void verNoAbordados() {
     if (vendidos == 0)
         printf("\nNo se han vendido tiquetes.\n");
