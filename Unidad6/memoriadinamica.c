@@ -1,29 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void) {
-    int n;
-
-    printf("Ingrese el tamaño del arreglo: ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Tamaño inválido.\n");
-        return 1;
-    }
-
-    int *numeros = malloc(n * sizeof(int)); 
-    if (numeros == NULL) {
-        printf("Error en la asignación de memoria.\n");
-        return 1;
-    }
-
-    printf("\nContenido del arreglo:\n");
-    for (int i = 0; i < n; i++) {
+int main() {
+    // --- Memoria estática ---
+    int numeros[5];  
+    printf("=== MEMORIA ESTÁTICA ===\n");
+    for (int i = 0; i < 5; i++) {
         numeros[i] = i * 10;
-        printf("%d ", numeros[i]);
+        printf("numeros[%d] = %d\n", i, numeros[i]);
     }
 
-    printf("\n");
+    // --- Memoria dinámica ---
+    int n;
+    printf("\n=== MEMORIA DINÁMICA ===\n");
+    printf("Ingrese el tamaño del arreglo: ");
+    scanf("%d", &n);
 
-    free(numeros);
+    int *dinamico = (int*) malloc(n * sizeof(int)); 
+    if (dinamico == NULL) {
+        printf("Error al asignar memoria.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        dinamico[i] = i * 10;
+        printf("dinamico[%d] = %d\n", i, dinamico[i]);
+    }
+
+    free(dinamico); 
+    printf("\nMemoria dinámica liberada correctamente.\n");
+
     return 0;
 }
