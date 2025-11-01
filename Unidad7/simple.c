@@ -1,131 +1,163 @@
 #include <stdio.h>
-
-#define MAX 50  
-
-typedef struct {
+#include <stdlib.h>
+#include <string.h>
+typedef struct Pasajero {
+    char genero[20];
     char apellido[30];
-    int ant;  
-    int sig;  
-} Nodo;
+    struct Pasajero *sig;
+} Pasajero;
 
-Nodo memoria[MAX];   
-int cab = -1;
-int libre = 0;       
-int capacidad = 0;
+Pasajero *inicio = NULL;
+Pasajero *abordados = NULL;
+Pasajero *noAbordados = NULL;
+
+int capacidadMax = 0;
+int capacidadTotal = 0;
 int vendidos = 0;
-int abordados = 0;
+int abordajeIniciado = 0;
 
-void establecer();
-void vender();
-void abordar();
-void verAbordados();
-void verNoAbordados();
+Pasajero* crearPasajero(char *genero, char *apellido) {
+    Pasajero *nuevo = (Pasajero*) malloc(sizeof(Pasajero));
+    strcpy(nuevo->genero, genero);
+    strcpy(nuevo->apellido, apellido);
+    nuevo->sig = NULL;
+    return nuevo;
+}
+
+void venderTiquete() {
+    if (abordajeIniciado) {
+        printf("\nNo se pueden vender tiquetes despues de iniciar el abordaje.\n");
+        return;
+    }
+
+    if (vendidos >= capacidadTotal) {
+        printf("\nNo se pueden vender mas tiquetes (limite de sobreventa alcanzado).\n");
+        return;
+    }
+
+    char genero[20], apellido[30];
+    printf("Ingrese genero (Femenino, Masculino, No_Binario): ");
+    scanf("%s", genero);
+    printf("Ingrese primer apellido: ");
+    scanf("%s", apellido);
+
+    Pasajero *nuevo = crearPasajero(genero, apellido);
+
+    if (inicio == NULL) {
+        inicio = nuevo;
+    } else {
+        Pasajero *temp = inicio;
+        while (temp->sig != NULL)
+            temp = temp->sig;
+        temp->sig = nuevo;
+    }
+
+    vendidos++;
+    printf("Tiquete vendido exitosamente a %s %s.\n", genero, apellido);
+}
+
+void establecerCapacidad() {
+    if (capacidadMax > 0) {
+        printf("La capacidad ya fue establecida.\n");
+        return;
+    }
+
+    printf("Ingrese la capacidad maxima del avion: ");
+    scanf("%d", &capacidadMax);
+    capacidadTotal = capacidadMax + (int)(capacidadMax * 0.1);
+    printf("Capacidad establecida: %d pasajeros (+10%% sobreventa = %d tiquetes maximos)\n",
+           capacidadMax, capacidadTotal);
+}
+
+void iniciarAbordaje() {
+    if (abordajeIniciado) {
+        printf("El abordaje ya ha sido iniciado.\n");
+        return;
+    }
+
+    if (inicio == NULL) {
+        printf("No hay pasajeros registrados.\n");
+        return;
+    }
+
+    abordajeIniciado = 1;
+    printf("\n=== PROCESO DE ABORDAJE ===\n");
+    int count = 0;
+    Pasajero *temp = inicio;
+
+    while (temp != NULL) {
+        Pasajero *siguiente = temp->sig;
+
+        if (count < capacidadMax) {
+            temp->sig = abordados;
+            abordados = temp;
+            count++;
+        } else {
+            temp->sig = noAbordados;
+            noAbordados = temp;
+        }
+
+        temp = siguiente;
+    }
+
+    inicio = NULL;
+    printf("Abordaje completado. %d pasajeros abordaron, %d no pudieron.\n",
+           count, vendidos - count);
+}
+
+void mostrarLista(Pasajero *lista, char *titulo) {
+    printf("\n=== %s ===\n", titulo);
+    if (lista == NULL) {
+        printf("No hay pasajeros.\n");
+        return;
+    }
+
+    Pasajero *temp = lista;
+    int i = 1;
+    while (temp != NULL) {
+        printf("%d. %s - %s\n", i++, temp->genero, temp->apellido);
+        temp = temp->sig;
+    }
+}
+
+void liberar(Pasajero *lista) {
+    Pasajero *temp;
+    while (lista != NULL) {
+        temp = lista;
+        lista = lista->sig;
+        free(temp);
+    }
+}
 
 int main() {
-    int opc;
+    int opcion;
     do {
-        printf("\n=== MENU PRINCIPAL SIMPLE.C ===\n");
-        printf("1. Establecer capacidad del avion\n");
+        printf("\n===== MENU PRINCIPAL (LISTA SIMPLE) =====\n");
+        printf("1. Establecer capacidad\n");
         printf("2. Vender tiquete\n");
         printf("3. Iniciar abordaje\n");
         printf("4. Ver abordados\n");
         printf("5. Ver no abordados\n");
         printf("6. Salir\n");
         printf("Seleccione una opcion: ");
-        scanf("%d", &opc);
+        scanf("%d", &opcion);
 
-        switch (opc) {
-            case 1: establecer(); break;
-            case 2: vender(); break;
-            case 3: abordar(); break;
-            case 4: verAbordados(); break;
-            case 5: verNoAbordados(); break;
-            case 6: printf("\nSaliendo del programa...\n"); break;
-            default: printf("\nOpcion invalida.\n"); break;
+        switch (opcion) {
+            case 1: establecerCapacidad(); break;
+            case 2: venderTiquete(); break;
+            case 3: iniciarAbordaje(); break;
+            case 4: mostrarLista(abordados, "PASAJEROS ABORDADOS"); break;
+            case 5: mostrarLista(noAbordados, "PASAJEROS NO ABORDADOS"); break;
+            case 6:
+                printf("Saliendo del programa...\n");
+                liberar(inicio);
+                liberar(abordados);
+                liberar(noAbordados);
+                break;
+            default:
+                printf("Opcion invalida.\n");
         }
-    } while (opc != 6);
+    } while (opcion != 6);
 
     return 0;
-}
-
-void establecer() {
-    if (capacidad > 0) {
-        printf("\nLa capacidad ya fue establecida: %d asientos.\n", capacidad);
-        return;
-    }
-
-    printf("\nIngrese la capacidad del avion (max %d): ", MAX);
-    scanf("%d", &capacidad);
-
-    if (capacidad <= 0 || capacidad > MAX) {
-        printf("Capacidad invalida.\n");
-        capacidad = 0;
-    } else {
-        printf("Capacidad establecida correctamente.\n");
-    }
-}
-
-void vender() {
-    if (capacidad == 0) {
-        printf("\nPrimero debe establecer la capacidad del avion.\n");
-        return;
-    }
-
-    if (vendidos >= capacidad) {
-        printf("\nTodos los tiquetes han sido vendidos.\n");
-        return;
-    }
-
-    printf("\nIngrese el apellido del pasajero: ");
-    scanf("%s", memoria[libre].apellido);
-
-    memoria[libre].ant = -1;
-    memoria[libre].sig = -1;
-
-    if (cab == -1) {
-        cab = libre;
-    } else {
-        int temp = cab;
-        while (memoria[temp].sig != -1)
-            temp = memoria[temp].sig;
-        memoria[temp].sig = libre;
-        memoria[libre].ant = temp;
-    }
-
-    libre++;
-    vendidos++;
-    printf("Tiquete vendido correctamente.\n");
-}
-
-void abordar() {
-    if (vendidos == 0) {
-        printf("\nNo hay pasajeros para abordar.\n");
-        return;
-    }
-
-    int temp = cab;
-    while (temp != -1) {
-        char r;
-        printf("¿El pasajero %s abordó? (s/n): ", memoria[temp].apellido);
-        scanf(" %c", &r);
-        if (r == 's' || r == 'S') {
-            abordados++;
-        }
-        temp = memoria[temp].sig;
-    }
-    printf("\nAbordaje completado.\n");
-}
-
-void verAbordados() {
-    if (abordados == 0)
-        printf("\nNingun pasajero ha abordado.\n");
-    else
-        printf("\nTotal abordados: %d\n", abordados);
-}
-
-void verNoAbordados() {
-    if (vendidos == 0)
-        printf("\nNo se han vendido tiquetes.\n");
-    else
-        printf("\nTotal no abordados: %d\n", vendidos - abordados);
 }
