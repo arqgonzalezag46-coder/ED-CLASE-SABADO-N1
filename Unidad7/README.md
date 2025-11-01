@@ -61,14 +61,23 @@ El sistema permite:
 
 ## 🖥️ Ejemplo de Ejecución: simple.c
 
-```text
+# ✈️ Sistema de Abordaje de Pasajeros en Avión
+
+## 🧭 MENÚ PRINCIPAL (simple.c)
+
 === MENU PRINCIPAL SIMPLE.C ===
-1. Establecer capacidad del avion
-2. Vender tiquete
-3. Iniciar abordaje
-4. Ver abordados
-5. Ver no abordados
-6. Salir
+
+Establecer capacidad del avion
+
+Vender tiquete
+
+Iniciar abordaje
+
+Ver abordados
+
+Ver no abordados
+
+Salir
 
 Seleccione una opcion: 1
 Ingrese la capacidad del avion (max 50): 5
@@ -93,28 +102,39 @@ Total abordados: 1
 Seleccione una opcion: 5
 Total no abordados: 1
 
-🧱 Estructura del Nodo
-Lista Simple
+---
+
+## 🧱 Estructura del Nodo
+
+### 📋 Lista Simple
+```c
 typedef struct nodo {
     char genero[20];
     char apellido[30];
     struct nodo *sig;
 } nodo;
+📋 Lista Doble
 
-Lista Doble
+Copiar código
 typedef struct nodo {
     char genero[20];
     char apellido[30];
     struct nodo *ant;
     struct nodo *sig;
 } nodo;
-
 Cada nodo representa un pasajero con:
+
 👤 Género
+
 🧾 Primer Apellido
+
 🔗 Puntero(s) al siguiente y anterior nodo
 
-📁 Archivos Incluidos
-simple.c → Lista enlazada simple
-doble.c → Lista doblemente enlazada
-README.md → Documentación completa del proyecto
+📁 Archivos del Proyecto
+Archivo	Descripción
+simple.c	Implementa la lista enlazada simple
+doble.c	Implementa la lista doblemente enlazada
+README.md	Documentación completa del proyecto
+
+📌 Resumen:
+El programa simula el proceso de venta de tiquetes y abordaje de pasajeros en un avión utilizando listas enlazadas. Permite establecer la capacidad del avión, registrar pasajeros, iniciar el abordaje, y mostrar los pasajeros abordados o no abordados según la lista empleada.
