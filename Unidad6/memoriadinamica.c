@@ -30,7 +30,7 @@ int main() {
     
     printf("=== 1. MEMORIA DINAMICA (malloc) ===\n");
     int n;
-    printf("Ingrese el tamaño del arreglo: ");
+    printf("Ingrese el tamano del arreglo: ");
     scanf("%d", &n);
 
     int *numeros = (int*) malloc(n * sizeof(int));
