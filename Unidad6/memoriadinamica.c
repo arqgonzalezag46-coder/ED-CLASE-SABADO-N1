@@ -28,7 +28,7 @@ void liberarLista(Nodo *inicio) {
 
 int main() {
     
-    printf("=== 1. MEMORIA DINÁMICA (malloc) ===\n");
+    printf("=== 1. MEMORIA DINAMICA (malloc) ===\n");
     int n;
     printf("Ingrese el tamaño del arreglo: ");
     scanf("%d", &n);
@@ -77,16 +77,16 @@ int main() {
         printf("%d ", numeros[i]);
     printf("\n\n");
 
-    printf("=== 4. LIBERACIÓN DE MEMORIA ===\n");
+    printf("=== 4. LIBERACION DE MEMORIA ===\n");
     free(copia);
     printf("Memoria de 'copia' liberada correctamente.\n\n");
 
-    printf("=== 5. PUNTEROS Y ARITMÉTICA DE PUNTEROS ===\n");
+    printf("=== 5. PUNTEROS Y ARITMETICA DE PUNTEROS ===\n");
     int arr[] = {5, 10, 15, 20, 25};
     int *p = arr;
 
     for (int i = 0; i < 5; i++)
-        printf("Valor: %d - Dirección: %p\n", *(p + i), (p + i));
+        printf("Valor: %d - Direccion: %p\n", *(p + i), (p + i));
 
     int *p1 = &arr[0];
     int *p2 = &arr[4];
@@ -109,7 +109,7 @@ int main() {
     }
     printf("NULL\n\n");
 
-    printf("=== 7. EXTENSIÓN: Insertar y liberar lista ===\n");
+    printf("=== 7. EXTENSION: Insertar y liberar lista ===\n");
     inicio = insertarInicio(inicio, 99);
     printf("Nodo 99 insertado al inicio.\n");
 
